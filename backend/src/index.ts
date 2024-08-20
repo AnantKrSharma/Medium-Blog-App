@@ -17,19 +17,23 @@ app.post('/api/v1/signup', async (c) => {
   }).$extends(withAccelerate())
 
   const body = await c.req.json();
+  try {
+    const newUser = await prisma.user.create({
+      data: {
+        email: body.email,
+        password: body.password
+      }
+    });
 
-  const response = await prisma.user.create({
-    data: {
-      email: body.email,
-      password: body.password
-    }
-  })
+    const token = await sign({ userID: newUser.id }, c.env.JWT_SECRET);
 
-  const token = sign({ id: response.id }, c.env.JWT_SECRET)
-
-  return c.json({
-    jwt: token
-  })
+    return c.json({ token })
+  } catch (error) {
+    c.status(403)
+    return c.json({
+      error: "Error while signing-up."
+    })
+  }
 })
 
 
