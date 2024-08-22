@@ -7,6 +7,9 @@ export const blogRouter = new Hono<{
     Bindings: {
         DATABASE_URL: string,
         JWT_SECRET: string
+    },
+    Variables: {
+        userId: any
     }
 }>();
 
@@ -19,7 +22,7 @@ blogRouter.use('/*', async (c, next) => {
         const verified = await verify(token, c.env.JWT_SECRET);
         
         if(verified.userId){
-            c.set("jwtPayload", verified.userId)
+            c.set("userId", verified.userId)
             await next();
         }
         else{
@@ -47,7 +50,7 @@ blogRouter.post('/', async (c) => {
             data: {
                 title: body.title,
                 content: body.content,
-                authorId: c.get('jwtPayload')
+                authorId: c.get('userId')
             }
         });
 
