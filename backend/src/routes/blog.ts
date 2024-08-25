@@ -2,6 +2,7 @@ import { Hono } from "hono"
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { verify } from "hono/jwt";
+import { createBlogSchema, updateBlogSchema } from "@100xanant/medium-common";
 
 export const blogRouter = new Hono<{
     Bindings: {
@@ -27,13 +28,13 @@ blogRouter.use('/*', async (c, next) => {
         }
         else{
             c.status(403);
-            return c.json({ error: "Unauthorized." })
+            return c.json({ error: "Unauthorized request." })
         }
     } catch (error) {
         console.log(error);
         
         c.status(403);
-        return c.json({ error: "Internal server error." })
+        return c.json({ error: "Unauthorized request." })
     }
 })
 
@@ -45,6 +46,11 @@ blogRouter.post('/', async (c) => {
 
     try {
         const body = await c.req.json();
+        const { success } = createBlogSchema.safeParse(body);
+        if(!success){
+            c.status(411);
+            return c.json({ message: "Inputs not correct." })
+        }
             
         const newBlog = await prisma.post.create({
             data: {
@@ -70,6 +76,11 @@ blogRouter.put('/', async (c) => {
 
     try {
         const body = await c.req.json();
+        const { success } = updateBlogSchema.safeParse(body);
+        if(!success){
+            c.status(411);
+            return c.json({ message: "Inputs not correct. "})
+        }
         
         const updatedBlog = await prisma.post.update({
             where: {
