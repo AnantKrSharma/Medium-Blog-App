@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"
 import { LabelledInput } from "./Input";
 import toast from "react-hot-toast";
-import axios from "axios";
 import { BACKEND_URL } from "../config";
 
 
@@ -18,8 +17,21 @@ export const SignUpForm = () => {
 
   async function handleSignUp(){
     try {
-      const response = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, postInput)
-      const data = await response.data;
+      const response = await fetch(`${BACKEND_URL}/api/v1/user/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(postInput),
+      });      
+      const data = await response.json();
+      
+      if(data.error){
+        throw new Error(data.error)
+      }
+      if(data.message){
+        toast.success(data.message)
+      }
       
       localStorage.setItem('token', data.jwt);
       navigate('/blog/1');

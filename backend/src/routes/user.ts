@@ -22,7 +22,7 @@ userRouter.post('/signup', async (c) => {
       const { success } = signupBodySchema.safeParse(body)
       if( !success ){
         c.status(411)
-        return c.json({ message: "Inputs not correct." })
+        return c.json({ error: "Inputs not correct." })
       }
 
       const newUser = await prisma.user.create({
@@ -41,7 +41,7 @@ userRouter.post('/signup', async (c) => {
       })
     } catch (error) {
       c.status(403)
-      return c.json({ message: "Error while signing-up." })
+      return c.json({ error: "Error while signing-up." })
     }
 })
 
@@ -56,7 +56,7 @@ userRouter.post('/signin', async (c) => {
       const { success } = signinBodySchema.safeParse(body);
       if(!success){
         c.status(411);
-        return c.json({ message: "Inputs not correct." })
+        return c.json({ error: "Inputs not correct." })
       }
 
       const userFound = await prisma.user.findUnique({
@@ -68,7 +68,7 @@ userRouter.post('/signin', async (c) => {
   
       if( !userFound ){
         c.status(403)
-        return c.json({ message: "Incorrect email or password."})
+        return c.json({ error: "Incorrect email or password."})
       }
   
       const jwt = await sign({ userId: userFound.id }, c.env.JWT_SECRET)
@@ -79,6 +79,6 @@ userRouter.post('/signin', async (c) => {
       })
     } catch (error) {
       c.status(403)
-      return c.json({ message: "Error while signing-in." })
+      return c.json({ error: "Error while signing-in." })
     }
 })

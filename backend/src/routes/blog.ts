@@ -28,11 +28,11 @@ blogRouter.use('/*', async (c, next) => {
         }
         else{
             c.status(403);
-            return c.json({ message: "Unauthorized request." })
+            return c.json({ error: "Unauthorized request." })
         }
     } catch (error) {
         c.status(403);
-        return c.json({ message: "Unauthorized request." })
+        return c.json({ error: "Unauthorized request." })
     }
 })
 
@@ -47,7 +47,7 @@ blogRouter.post('/', async (c) => {
         const { success } = createBlogSchema.safeParse(body);
         if(!success){
             c.status(411);
-            return c.json({ message: "Inputs not correct." })
+            return c.json({ error: "Inputs not correct." })
         }
             
         const newBlog = await prisma.post.create({
@@ -64,7 +64,7 @@ blogRouter.post('/', async (c) => {
         });
     } catch (error) {
         c.status(403);
-        return c.json({ message: "Error while creating a new blog." })
+        return c.json({ error: "Error while creating a new blog." })
     }
 })
 
@@ -79,7 +79,7 @@ blogRouter.put('/', async (c) => {
         const { success } = updateBlogSchema.safeParse(body);
         if(!success){
             c.status(411);
-            return c.json({ message: "Inputs not correct. "})
+            return c.json({ error: "Inputs not correct. "})
         }
         
         const updatedBlog = await prisma.post.update({
@@ -98,7 +98,7 @@ blogRouter.put('/', async (c) => {
         })
     } catch (error) {
         c.status(403);
-        return c.json({ message: "Error while updating the blog." })
+        return c.json({ error: "Error while updating the blog." })
     }
 })
 
@@ -120,7 +120,7 @@ blogRouter.get('/get/:id', async (c) => {
         return c.json({ blog })
     } catch (error) {
         c.status(403)
-        return c.json({ message: "Error while fetching the blog post." })
+        return c.json({ error: "Error while fetching the blog post." })
     }
 })
 
@@ -136,6 +136,6 @@ blogRouter.get('/bulk', async (c) => {
         return c.json({ allBlogs })
     } catch (error) {
         c.status(403);
-        return c.json({ message: "Error while fetching the blogs." })
+        return c.json({ error: "Error while fetching the blogs." })
     }
 })

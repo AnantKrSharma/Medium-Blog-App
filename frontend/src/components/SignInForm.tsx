@@ -1,14 +1,46 @@
 import { SigninBodyInput } from "@100xanant/medium-common";
 import { useState } from "react";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { LabelledInput } from "./Input";
+import { BACKEND_URL } from "../config";
+import toast from "react-hot-toast";
 
 export const SignInForm = () => {
+  const navigate = useNavigate();
+
   const [postInput, setPostInput] = useState<SigninBodyInput>({
     email: '',
     password: ''
   })
   
+  async function handleSignIn(){
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/v1/user/signin`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(postInput)
+      })
+      const data = await response.json();
+
+      console.log(data);
+
+      if(data.error){
+        throw new Error(data.error)
+      }
+      if(data.message){
+        toast.success(data.message)
+      }
+
+      localStorage.setItem('token', data.jwt)
+      navigate('/blog/1')
+
+    } catch (error: any) {
+      toast.error(error.message)
+    }
+  }
+
   return (
     <div className="h-screen flex flex-col justify-center items-center">
 
@@ -47,8 +79,9 @@ export const SignInForm = () => {
                             }}
               />
 
-              <button type="button" className="mt-2 w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:border-gray-700">
-                Sign In
+              <button type="button" className="mt-2 w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:border-gray-700"
+                      onClick={handleSignIn}
+              > Sign In
               </button>
             </div>
 
