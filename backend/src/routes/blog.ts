@@ -28,13 +28,11 @@ blogRouter.use('/*', async (c, next) => {
         }
         else{
             c.status(403);
-            return c.json({ error: "Unauthorized request." })
+            return c.json({ message: "Unauthorized request." })
         }
     } catch (error) {
-        console.log(error);
-        
         c.status(403);
-        return c.json({ error: "Unauthorized request." })
+        return c.json({ message: "Unauthorized request." })
     }
 })
 
@@ -60,12 +58,14 @@ blogRouter.post('/', async (c) => {
             }
         });
 
-        return c.json({ id: newBlog.id });
+        return c.json({ 
+            id: newBlog.id,
+            message: "New blog post created." 
+        });
     } catch (error) {
         c.status(403);
-        return c.json({ error: "Error while creating a new blog." })
+        return c.json({ message: "Error while creating a new blog." })
     }
-
 })
 
 
@@ -92,10 +92,13 @@ blogRouter.put('/', async (c) => {
             }
         });
 
-        return c.json({ id: updatedBlog.id })
+        return c.json({ 
+            id: updatedBlog.id,
+            message: "Blog updated." 
+        })
     } catch (error) {
         c.status(403);
-        return c.json({ error: "Error while updating the blog." })
+        return c.json({ message: "Error while updating the blog." })
     }
 })
 
@@ -117,7 +120,7 @@ blogRouter.get('/get/:id', async (c) => {
         return c.json({ blog })
     } catch (error) {
         c.status(403)
-        return c.json({ error: "Error while fetching the blog post." })
+        return c.json({ message: "Error while fetching the blog post." })
     }
 })
 
@@ -133,6 +136,6 @@ blogRouter.get('/bulk', async (c) => {
         return c.json({ allBlogs })
     } catch (error) {
         c.status(403);
-        return c.json({ error: "Error while fetching the blogs." })
+        return c.json({ message: "Error while fetching the blogs." })
     }
 })

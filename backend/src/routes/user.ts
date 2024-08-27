@@ -35,10 +35,13 @@ userRouter.post('/signup', async (c) => {
   
       const jwt = await sign({ userId: newUser.id }, c.env.JWT_SECRET);
   
-      return c.json({ jwt })
+      return c.json({ 
+        jwt,
+        message: "Signed up successfully."
+      })
     } catch (error) {
       c.status(403)
-      return c.json({ error: "Error while signing-up." })
+      return c.json({ message: "Error while signing-up." })
     }
 })
 
@@ -65,14 +68,17 @@ userRouter.post('/signin', async (c) => {
   
       if( !userFound ){
         c.status(403)
-        return c.json({ error: "Incorrect email or password."})
+        return c.json({ message: "Incorrect email or password."})
       }
   
       const jwt = await sign({ userId: userFound.id }, c.env.JWT_SECRET)
   
-      return c.json({ jwt })
+      return c.json({ 
+        jwt,
+        message: "Signed in successfully."
+      })
     } catch (error) {
       c.status(403)
-      return c.json({ error: "Error while signing-in." })
+      return c.json({ message: "Error while signing-in." })
     }
 })

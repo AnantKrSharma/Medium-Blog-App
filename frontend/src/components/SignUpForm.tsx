@@ -1,14 +1,33 @@
 import { SignupBodyInput } from "@100xanant/medium-common";
 import { useState } from "react";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { LabelledInput } from "./Input";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { BACKEND_URL } from "../config";
+
 
 export const SignUpForm = () => {
+  const navigate = useNavigate();
+
   const [postInput, setPostInput] = useState<SignupBodyInput>({
     name: '',
     email: '',
     password: ''
   })
+
+  async function handleSignUp(){
+    try {
+      const response = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, postInput)
+      const data = await response.data;
+      
+      localStorage.setItem('token', data.jwt);
+      navigate('/blog/1');
+
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  }
   
   return (
     <div className="h-screen flex flex-col justify-center items-center">
@@ -56,8 +75,9 @@ export const SignUpForm = () => {
                             }}
               />
 
-              <button type="button" className="mt-2 w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:border-gray-700">
-                Sign Up
+              <button type="button" className="mt-2 w-full text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:border-gray-700"
+                      onClick={handleSignUp}
+              > Sign Up
               </button>
             </div>
 
