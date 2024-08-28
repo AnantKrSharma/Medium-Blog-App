@@ -24,8 +24,6 @@ export const SignInForm = () => {
       })
       const data = await response.json();
 
-      console.log(data);
-
       if(data.error){
         throw new Error(data.error)
       }
@@ -34,7 +32,7 @@ export const SignInForm = () => {
       }
 
       localStorage.setItem('token', data.jwt)
-      navigate('/blog/1')
+      navigate('/blogs')
 
     } catch (error: any) {
       toast.error(error.message)

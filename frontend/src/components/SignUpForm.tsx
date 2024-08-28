@@ -34,7 +34,7 @@ export const SignUpForm = () => {
       }
       
       localStorage.setItem('token', data.jwt);
-      navigate('/blog/1');
+      navigate('/blogs');
 
     } catch (error: any) {
       toast.error(error.message);
