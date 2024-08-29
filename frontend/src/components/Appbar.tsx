@@ -12,7 +12,7 @@ export const Appbar = ({ newBlog = true }: {newBlog?: boolean | true}) => {
         </div>
         
         <div className="flex justify-center items-center gap-5 p-3 [&>*]:m-0">
-            <button className="bg-red-500 p-[9px] text-lg font-semibold text-white rounded-lg hover:bg-red-700"
+            <button className="bg-slate-500 p-[9px] text-lg font-semibold text-white rounded-lg hover:bg-slate-700"
                     onClick={() => { 
                         localStorage.removeItem('token') 
                         navigate('/signin')
@@ -23,7 +23,7 @@ export const Appbar = ({ newBlog = true }: {newBlog?: boolean | true}) => {
 
             {newBlog ?
                     <Link to={'/publish'}>
-                        <button type="button" className="focus:outline-none text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-full px-3 py-3">
+                        <button type="button" className="focus:outline-none text-white bg-yellow-700 hover:bg-amber-900 focus:ring-4 focus:ring-green-300 font-medium rounded-full px-3 py-3">
                             New Blog +
                         </button>
                     </Link>

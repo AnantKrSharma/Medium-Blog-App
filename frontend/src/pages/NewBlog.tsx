@@ -4,6 +4,7 @@ import { useState } from "react";
 import { BACKEND_URL } from "../config";
 import toast from "react-hot-toast";
 import { Spinner } from "../components/Spinner";
+import { useNavigate } from "react-router-dom";
 
 export const NewBlog = () => {
     const [loading, setLoading] = useState(false);
@@ -11,13 +12,14 @@ export const NewBlog = () => {
         title: '',
         content: ''
     });
+    const navigate = useNavigate();
 
     const handleClick = async () =>{
         try {
             if(blog.title.length == 0 || blog.content.length == 0){
                 throw new Error("Enter valid title and content.");
             }
-            
+
             setLoading(true);
             const res = await fetch(`${BACKEND_URL}/api/v1/blog`, {
                 method: 'POST',
@@ -36,6 +38,9 @@ export const NewBlog = () => {
             if(data.message){
                 toast.success(data.message);
             }
+
+            navigate(`/blog/${data.id}`)
+
         } catch (error: any) {
             toast.error(error.message);
         }
