@@ -16,6 +16,7 @@ export const AllBlogs = () => {
                     <Skeleton /> 
                     <Skeleton /> 
                     <Skeleton /> 
+                    <Skeleton /> 
                 </div>
                 :
                 <div className="max-w-5xl">

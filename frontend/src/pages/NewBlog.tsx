@@ -77,6 +77,7 @@ export const NewBlog = () => {
                 <div className="w-full">
                     <button className="border bg-blue-500 text-white text-lg font-semibold py-3 px-5 rounded-xl hover:bg-blue-700 min-w-36"
                             onClick={handleClick}
+                            disabled={loading}
                     >
                         {loading ? <Spinner /> : "Publish blog"}
                     </button>
