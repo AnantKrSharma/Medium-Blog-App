@@ -17,8 +17,8 @@ function App() {
       <BrowserRouter>
           <Routes>
             <Route path='/' element={<Signup />} />
-            <Route path='/signup' element={<Signup />} />
-            <Route path='/signin' element={<Signin />} />
+            <Route path='/signup' element={loggedIn ? <Navigate to={'/blogs'} /> : <Signup />} />
+            <Route path='/signin' element={loggedIn ? <Navigate to={'/blogs'} /> : <Signin />} />
             <Route path='/blogs' element={loggedIn ? <AllBlogs /> : <Navigate to={'/signin'} /> } />
             <Route path='/blog/:id' element={loggedIn ? <Blog /> : <Navigate to={'/signin'} /> } />
             <Route path='/publish' element={loggedIn ? <NewBlog /> : <Navigate to={'/signin'} /> } />
